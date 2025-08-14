@@ -4,4 +4,4 @@ from .models import Pedido
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
-        fields = '__all__'
+        fields = "__all__"
