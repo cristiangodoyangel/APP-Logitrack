@@ -1,8 +1,7 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework import generics
+from .models import Pedido
+from .serializers import PedidoSerializer
 
-@api_view(["GET"])
-def ping(request):
-    return Response({"status": "ok"})
-
-# ping funcionando
+class PedidoListCreateView(generics.ListCreateAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
