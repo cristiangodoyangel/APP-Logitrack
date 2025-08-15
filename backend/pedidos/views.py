@@ -7,26 +7,41 @@ from django.db.models import Count
 from .models import Pedido
 from .serializers import PedidoSerializer
 
-# 1. PedidoListCreateView (ya la tienes, solo agregamos ordering)
+# 1. PedidoListCreateView (ya la tienes, con ordering)
 class PedidoListCreateView(generics.ListCreateAPIView):
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
     filterset_fields = ['chofer', 'cliente', 'estped']
-    ordering_fields = ['fecped', 'estped']  # Nuevo
+    ordering_fields = ['fecped', 'estped']
 
-# 2. Actualizar estado de pedido
+# 2. Actualizar estado de pedido (solo PATCH y solo estped)
 class PedidoEstadoUpdateView(generics.UpdateAPIView):
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
 
+    # Permitimos únicamente el método PATCH
+    http_method_names = ['patch']
+
     def partial_update(self, request, *args, **kwargs):
         pedido = self.get_object()
-        nuevo_estado = request.data.get('estped', None)
-        if nuevo_estado:
-            pedido.estped = nuevo_estado
-            pedido.save()
-            return Response({'mensaje': 'Estado actualizado', 'pedido': PedidoSerializer(pedido).data})
-        return Response({'error': 'No se envió el estado'}, status=status.HTTP_400_BAD_REQUEST)
+        nuevo_estado = request.data.get('estped')
+        if not nuevo_estado:
+            return Response(
+                {"error": "Debes enviar el campo 'estped'."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        pedido.estped = nuevo_estado
+        # Actualizamos solo este campo
+        pedido.save(update_fields=['estped'])
+
+        return Response(
+            {
+                "mensaje": "Estado actualizado",
+                "pedido": PedidoSerializer(pedido).data
+            },
+            status=status.HTTP_200_OK
+        )
 
 # 3. Vista para chofer (solo pedidos activos asignados a él)
 class PedidosChoferActivosView(generics.ListAPIView):
