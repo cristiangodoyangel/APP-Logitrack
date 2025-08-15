@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
-    "django_filters",  # ✅ Necesario para filtros
+    "django_filters", 
     "pedidos",
 ]
 
