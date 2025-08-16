@@ -1,0 +1,18 @@
+.nav-btn {
+  background-color: #ffffff;
+  color: #074260;
+  border: 1px solid #074260;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-btn:hover {
+  background-color: #074260;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(7, 66, 96, 0.6);
+}
+
+.nav-btn.active {
+  background-color: #074260 !important;
+  color: #ffffff !important;
+}

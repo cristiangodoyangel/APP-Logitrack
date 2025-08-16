@@ -13,6 +13,19 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { Layout } from "./Layout";
+
+// Paleta de azules
+const COLORS = [
+  "#074260", // azul fuerte
+  "#0a5678",
+  "#1c6d92",
+  "#2f85ad",
+  "#4b9fc7",
+  "#74b8d9",
+  "#a1d0e6",
+  "#d8e7ed", // azul claro
+];
 
 export function Dashboard() {
   const [dashboardData, setDashboardData] = useState<any>(null);
@@ -46,32 +59,6 @@ export function Dashboard() {
     fetchData();
   }, []);
 
-  const getStatusBadge = (status: string, urgent: boolean) => {
-    const statusConfig = {
-      pending: { label: "Pendiente", class: "bg-warning" },
-      in_transit: { label: "En tránsito", class: "bg-info" },
-      delivered: { label: "Entregado", class: "bg-success" },
-    };
-
-    return (
-      <div className="d-flex align-items-center gap-1">
-        {urgent && (
-          <span className="badge bg-danger me-1">
-            <i className="bi bi-exclamation-triangle me-1"></i>
-            URGENTE
-          </span>
-        )}
-        <span
-          className={`badge ${
-            statusConfig[status as keyof typeof statusConfig].class
-          }`}
-        >
-          {statusConfig[status as keyof typeof statusConfig].label}
-        </span>
-      </div>
-    );
-  };
-
   if (error) {
     return <p className="m-4 text-danger">{error}</p>;
   }
@@ -81,8 +68,28 @@ export function Dashboard() {
   }
 
   return (
-    <div style={{ backgroundColor: "#d8e7ed", minHeight: "100vh", padding: "20px" }}>
-      {/* Menú de navegación con colores personalizados */}
+    <Layout title="Dashboard">
+      {/* Estilos para botones con hover */}
+      <style>{`
+        .nav-btn {
+          background-color: #ffffff;
+          color: #074260;
+          border: 1px solid #074260;
+          font-weight: 500;
+          transition: all 0.3s ease-in-out;
+        }
+        .nav-btn:hover {
+          background-color: #074260;
+          color: #ffffff;
+          box-shadow: 0 0 10px rgba(7, 66, 96, 0.6);
+        }
+        .nav-btn.active {
+          background-color: #074260 !important;
+          color: #ffffff !important;
+        }
+      `}</style>
+
+      {/* Menú de navegación */}
       <div className="mb-4 d-flex flex-wrap gap-2">
         {[
           { path: "/dashboard", icon: "bi-speedometer2", label: "Dashboard" },
@@ -95,30 +102,14 @@ export function Dashboard() {
           <Link
             key={item.path}
             to={item.path}
-            className={`btn ${
+            className={`btn nav-btn ${
               location.pathname === item.path ? "active" : ""
             }`}
-            style={{
-              backgroundColor:
-                location.pathname === item.path ? "#074260" : "#ffffff",
-              color:
-                location.pathname === item.path ? "#ffffff" : "#074260",
-              border: "1px solid #074260",
-              fontWeight: "500",
-            }}
           >
             <i className={`bi ${item.icon} me-1`}></i>
             {item.label}
           </Link>
         ))}
-      </div>
-
-      {/* Encabezado */}
-      <div className="row mb-4">
-        <div className="col">
-          <h2 style={{ color: "#074260" }}>Dashboard</h2>
-          <p style={{ color: "#052d48" }}>Resumen general del sistema de entregas</p>
-        </div>
       </div>
 
       {/* Tarjetas de estadísticas */}
@@ -130,10 +121,7 @@ export function Dashboard() {
           { title: "Urgentes", value: dashboardData.urgentOrders },
         ].map((card, idx) => (
           <div key={idx} className="col-md-3 mb-3">
-            <div
-              className="card shadow-sm"
-              style={{ backgroundColor: "#ffffff", border: "none" }}
-            >
+            <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
               <div className="card-body">
                 <h6 style={{ color: "#074260" }}>{card.title}</h6>
                 <h3 style={{ color: "#074260" }}>{card.value}</h3>
@@ -148,13 +136,13 @@ export function Dashboard() {
         {[
           { title: "Clientes Activos", value: dashboardData.totalClients },
           { title: "Choferes Activos", value: dashboardData.activeDrivers },
-          { title: "Ingresos", value: `$${dashboardData.totalRevenue.toLocaleString()}` },
+          {
+            title: "Ingresos",
+            value: `$${dashboardData.totalRevenue.toLocaleString()}`,
+          },
         ].map((card, idx) => (
           <div key={idx} className="col-md-4 mb-3">
-            <div
-              className="card shadow-sm"
-              style={{ backgroundColor: "#ffffff", border: "none" }}
-            >
+            <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
               <div className="card-body">
                 <h6 style={{ color: "#074260" }}>{card.title}</h6>
                 <h4 style={{ color: "#074260" }}>{card.value}</h4>
@@ -166,6 +154,7 @@ export function Dashboard() {
 
       {/* Gráficos */}
       <div className="row mb-4">
+        {/* Pedidos por Mes */}
         <div className="col-lg-8 mb-3">
           <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
             <div className="card-body">
@@ -177,7 +166,14 @@ export function Dashboard() {
                     <XAxis dataKey="month" stroke="#074260" />
                     <YAxis stroke="#074260" />
                     <Tooltip />
-                    <Bar dataKey="orders" fill="#074260" />
+                    <Bar dataKey="orders">
+                      {monthlyData.map((_, index) => (
+                        <Cell
+                          key={`bar-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -185,6 +181,7 @@ export function Dashboard() {
           </div>
         </div>
 
+        {/* Pedidos por Categoría */}
         <div className="col-lg-4 mb-3">
           <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
             <div className="card-body">
@@ -203,10 +200,10 @@ export function Dashboard() {
                       outerRadius={80}
                       dataKey="value"
                     >
-                      {categoryData.map((entry, index) => (
+                      {categoryData.map((_, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={entry.color || "#074260"}
+                          fill={COLORS[index % COLORS.length]}
                         />
                       ))}
                     </Pie>
@@ -236,6 +233,6 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
