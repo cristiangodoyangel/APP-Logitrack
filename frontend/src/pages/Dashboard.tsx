@@ -13,7 +13,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { Layout } from "./Layout";
+import { Layout } from "../components/Layout";
 
 // Paleta de azules
 const COLORS = [

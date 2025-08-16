@@ -47,3 +47,5 @@ export function Pedidos() {
     </Layout>
   );
 }
+export { Layout };
+

@@ -1,11 +1,11 @@
-// src/pages/Pedidos.jsx
+// src/pages/Pedidos.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Layout from "../components/Layout"; // 👈 asegúrate que tu Layout esté en esta ruta
+import { Layout } from "../components/Layout"; // ✅ corregida la ruta real (components)
 
 export function Pedidos() {
-  const [pedidos, setPedidos] = useState([]);
-  const [error, setError] = useState(null);
+  const [pedidos, setPedidos] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -15,45 +15,33 @@ export function Pedidos() {
   }, []);
 
   return (
-    <Layout>
-      <div
-        style={{
-          backgroundColor: "#d8e7ed",
-          minHeight: "100vh",
-          padding: "20px",
-        }}
-      >
-        <h2 style={{ color: "#074260" }}>Pedidos</h2>
-        <div
-          className="card shadow-sm mt-3"
-          style={{ backgroundColor: "#ffffff" }}
-        >
-          <div className="card-body">
-            {error ? (
-              <p className="text-danger">{error}</p>
-            ) : (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
+    <Layout title="Pedidos">
+      <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
+        <div className="card-body">
+          {error ? (
+            <p className="text-danger">{error}</p>
+          ) : (
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pedidos.map((p) => (
+                  <tr key={p.idoped}>
+                    <td>{p.idoped}</td>
+                    <td>{p.idclie}</td>
+                    <td>{p.estped}</td>
+                    <td>{p.fecped}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {pedidos.map((p) => (
-                    <tr key={p.idoped}>
-                      <td>{p.idoped}</td>
-                      <td>{p.idclie}</td>
-                      <td>{p.estped}</td>
-                      <td>{p.fecped}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </Layout>
