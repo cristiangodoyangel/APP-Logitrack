@@ -19,6 +19,7 @@ class VehiculoSerializer(serializers.ModelSerializer):
 class PedidoSerializer(serializers.ModelSerializer):
     cliente_nombre = serializers.CharField(source='cliente.nombre', read_only=True)
     chofer_nombre = serializers.CharField(source='chofer.nombre', read_only=True)
+    estped_display = serializers.CharField(source='get_estped_display', read_only=True)  # 🔹 Nuevo campo legible
 
     class Meta:
         model = Pedido
