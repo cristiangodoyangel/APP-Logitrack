@@ -110,7 +110,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
-# Configuración de DRF y autenticación JWT
+
+from datetime import timedelta
+
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
@@ -120,10 +122,25 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
+
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend"
     ],
+
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+
+    # 👇 Esto asegura que todas las vistas requieren autenticación
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),   
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     
+    "ROTATE_REFRESH_TOKENS": True,                    
+    "BLACKLIST_AFTER_ROTATION": True,                 
+    "AUTH_HEADER_TYPES": ("Bearer",),                 
 }
