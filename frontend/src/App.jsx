@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+// Vistas de ejemplo
+function Home() {
+  return <h2>🏠 Bienvenido a Logitrack</h2>;
 }
 
-export default App
+function Pedidos() {
+  return <h2>📦 Listado de Pedidos</h2>;
+}
+
+function Chofer() {
+  return <h2>🚚 Panel del Chofer</h2>;
+}
+
+function Dashboard() {
+  return <h2>📊 Dashboard con gráficos</h2>;
+}
+
+function App() {
+  return (
+    <Router>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="container">
+          <Link className="navbar-brand" to="/">Logitrack</Link>
+          <div className="collapse navbar-collapse">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/pedidos">Pedidos</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/chofer">Chofer</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard">Dashboard</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      {/* Contenido principal */}
+      <div className="container mt-4">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/pedidos" element={<Pedidos />} />
+          <Route path="/chofer" element={<Chofer />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
