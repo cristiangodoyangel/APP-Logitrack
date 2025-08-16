@@ -55,13 +55,26 @@ TEMPLATES = [
 WSGI_APPLICATION = "logitrack.wsgi.application"
 ASGI_APPLICATION = "logitrack.asgi.application"
 
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
 # Base de datos SQLite por defecto (ajusta a MySQL cuando corresponda)
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv("MYSQL_DATABASE", "misrutas"),
+        "USER": os.getenv("MYSQL_USER", "root"),
+        "PASSWORD": os.getenv("MYSQL_PASSWORD", "Calama1."),
+        "HOST": os.getenv("MYSQL_HOST", "localhost"),
+        "PORT": os.getenv("MYSQL_PORT", "3306"),
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            "charset": "utf8mb4",
+        },
     }
 }
+
 
 # Modelo de usuario personalizado con roles
 AUTH_USER_MODEL = "accounts.User"
