@@ -58,8 +58,7 @@ ASGI_APPLICATION = "logitrack.asgi.application"
 import pymysql
 pymysql.install_as_MySQLdb()
 
-
-# Base de datos SQLite por defecto (ajusta a MySQL cuando corresponda)
+# se mirgra a MySQL
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
