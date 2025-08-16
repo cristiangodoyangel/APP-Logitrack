@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import {
   BarChart,
@@ -20,6 +21,8 @@ export function Dashboard() {
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const location = useLocation();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,7 +39,7 @@ export function Dashboard() {
         setRecentOrders(recientes.data);
       } catch (err: any) {
         console.error("Error al cargar dashboard:", err);
-        setError("No se pudieron cargar los datos del dashboard. Verifica que el backend permita acceso público o que envíes un token de autenticación.");
+        setError("No se pudieron cargar los datos del dashboard.");
       }
     };
 
@@ -58,7 +61,11 @@ export function Dashboard() {
             URGENTE
           </span>
         )}
-        <span className={`badge ${statusConfig[status as keyof typeof statusConfig].class}`}>
+        <span
+          className={`badge ${
+            statusConfig[status as keyof typeof statusConfig].class
+          }`}
+        >
           {statusConfig[status as keyof typeof statusConfig].label}
         </span>
       </div>
@@ -74,97 +81,103 @@ export function Dashboard() {
   }
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#d8e7ed", minHeight: "100vh", padding: "20px" }}>
+      {/* Menú de navegación con colores personalizados */}
+      <div className="mb-4 d-flex flex-wrap gap-2">
+        {[
+          { path: "/dashboard", icon: "bi-speedometer2", label: "Dashboard" },
+          { path: "/pedidos", icon: "bi-box", label: "Pedidos" },
+          { path: "/clientes", icon: "bi-people", label: "Clientes" },
+          { path: "/chofer", icon: "bi-truck", label: "Choferes" },
+          { path: "/vehiculos", icon: "bi-car-front", label: "Vehículos" },
+          { path: "/delivery", icon: "bi-phone", label: "App Delivery" },
+        ].map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`btn ${
+              location.pathname === item.path ? "active" : ""
+            }`}
+            style={{
+              backgroundColor:
+                location.pathname === item.path ? "#074260" : "#ffffff",
+              color:
+                location.pathname === item.path ? "#ffffff" : "#074260",
+              border: "1px solid #074260",
+              fontWeight: "500",
+            }}
+          >
+            <i className={`bi ${item.icon} me-1`}></i>
+            {item.label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Encabezado */}
       <div className="row mb-4">
         <div className="col">
-          <h2>Dashboard</h2>
-          <p className="text-muted">Resumen general del sistema de entregas</p>
+          <h2 style={{ color: "#074260" }}>Dashboard</h2>
+          <p style={{ color: "#052d48" }}>Resumen general del sistema de entregas</p>
         </div>
       </div>
 
-      {/* Tarjetas de estadísticas principales */}
+      {/* Tarjetas de estadísticas */}
       <div className="row mb-4">
-        <div className="col-md-3 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="text-muted">Total Pedidos</h6>
-              <h3>{dashboardData.totalOrders}</h3>
+        {[
+          { title: "Total Pedidos", value: dashboardData.totalOrders },
+          { title: "Pendientes", value: dashboardData.pendingOrders },
+          { title: "Entregados", value: dashboardData.deliveredOrders },
+          { title: "Urgentes", value: dashboardData.urgentOrders },
+        ].map((card, idx) => (
+          <div key={idx} className="col-md-3 mb-3">
+            <div
+              className="card shadow-sm"
+              style={{ backgroundColor: "#ffffff", border: "none" }}
+            >
+              <div className="card-body">
+                <h6 style={{ color: "#074260" }}>{card.title}</h6>
+                <h3 style={{ color: "#074260" }}>{card.value}</h3>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="col-md-3 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="text-muted">Pendientes</h6>
-              <h3 className="text-warning">{dashboardData.pendingOrders}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="text-muted">Entregados</h6>
-              <h3 className="text-success">{dashboardData.deliveredOrders}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-3 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="text-muted">Urgentes</h6>
-              <h3 className="text-danger">{dashboardData.urgentOrders}</h3>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Segunda fila de estadísticas */}
+      {/* Segunda fila */}
       <div className="row mb-4">
-        <div className="col-md-4 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Clientes Activos</h6>
-              <h4>{dashboardData.totalClients}</h4>
+        {[
+          { title: "Clientes Activos", value: dashboardData.totalClients },
+          { title: "Choferes Activos", value: dashboardData.activeDrivers },
+          { title: "Ingresos", value: `$${dashboardData.totalRevenue.toLocaleString()}` },
+        ].map((card, idx) => (
+          <div key={idx} className="col-md-4 mb-3">
+            <div
+              className="card shadow-sm"
+              style={{ backgroundColor: "#ffffff", border: "none" }}
+            >
+              <div className="card-body">
+                <h6 style={{ color: "#074260" }}>{card.title}</h6>
+                <h4 style={{ color: "#074260" }}>{card.value}</h4>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="col-md-4 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Choferes Activos</h6>
-              <h4>{dashboardData.activeDrivers}</h4>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-4 mb-3">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h6 className="card-title">Ingresos</h6>
-              <h4>${dashboardData.totalRevenue.toLocaleString()}</h4>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Gráficos */}
       <div className="row mb-4">
         <div className="col-lg-8 mb-3">
-          <div className="card border-0 shadow-sm">
+          <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
             <div className="card-body">
-              <h5>Pedidos por Mes</h5>
+              <h5 style={{ color: "#074260" }}>Pedidos por Mes</h5>
               <div style={{ height: "300px" }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#d8e7ed" />
+                    <XAxis dataKey="month" stroke="#074260" />
+                    <YAxis stroke="#074260" />
                     <Tooltip />
-                    <Bar dataKey="orders" fill="#007bff" />
+                    <Bar dataKey="orders" fill="#074260" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -173,9 +186,9 @@ export function Dashboard() {
         </div>
 
         <div className="col-lg-4 mb-3">
-          <div className="card border-0 shadow-sm">
+          <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
             <div className="card-body">
-              <h5>Pedidos por Categoría</h5>
+              <h5 style={{ color: "#074260" }}>Pedidos por Categoría</h5>
               <div style={{ height: "300px" }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -184,12 +197,17 @@ export function Dashboard() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
                       outerRadius={80}
                       dataKey="value"
                     >
                       {categoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color || "#007bff"} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.color || "#074260"}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
@@ -204,9 +222,9 @@ export function Dashboard() {
       {/* Pedidos recientes */}
       <div className="row">
         <div className="col-12">
-          <div className="card border-0 shadow-sm">
+          <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
             <div className="card-body">
-              <h5>Pedidos Recientes</h5>
+              <h5 style={{ color: "#074260" }}>Pedidos Recientes</h5>
               <ul className="list-group list-group-flush">
                 {recentOrders.map((order) => (
                   <li key={order.id} className="list-group-item">
