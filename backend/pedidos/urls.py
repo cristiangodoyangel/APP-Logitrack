@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     # CRUD Pedidos
     PedidoListCreateView,
+    PedidoPublicListView,
     PedidoEstadoUpdateView,
     PedidoEstadoUbicacionUpdateView,
     PedidosChoferActivosView,
@@ -17,17 +18,28 @@ from .views import (
     VehiculoRetrieveUpdateDestroyView,
     # Utilidades
     ping,
-    resumen_pedidos
+    resumen_pedidos,
+)
+
+# Importar vistas del dashboard
+from .views_dashboard import (
+    dashboard_resumen,
+    dashboard_mensual,
+    dashboard_categorias,
+    dashboard_recientes,
 )
 
 urlpatterns = [
+    # --------------------------
     # Ping de prueba
+    # --------------------------
     path("ping/", ping, name="ping"),
 
     # --------------------------
     # CRUD Pedidos
     # --------------------------
     path("pedidos/", PedidoListCreateView.as_view(), name="pedido-list-create"),
+    path("pedidos/public/", PedidoPublicListView.as_view(), name="pedido-public-list"),
     path("pedidos/<int:pk>/estado/", PedidoEstadoUpdateView.as_view(), name="pedido-estado-update"),
     path("pedidos/<int:pk>/estado-ubicacion/", PedidoEstadoUbicacionUpdateView.as_view(), name="pedido-estado-ubicacion-update"),
     path("pedidos/chofer/<int:chofer_id>/activos/", PedidosChoferActivosView.as_view(), name="pedidos-chofer-activos"),
@@ -50,4 +62,12 @@ urlpatterns = [
     # --------------------------
     path("vehiculos/", VehiculoListCreateView.as_view(), name="vehiculo-list-create"),
     path("vehiculos/<int:pk>/", VehiculoRetrieveUpdateDestroyView.as_view(), name="vehiculo-detail"),
+
+    # --------------------------
+    # Dashboard
+    # --------------------------
+    path("dashboard/resumen/", dashboard_resumen, name="dashboard-resumen"),
+    path("dashboard/mensual/", dashboard_mensual, name="dashboard-mensual"),
+    path("dashboard/categorias/", dashboard_categorias, name="dashboard-categorias"),
+    path("dashboard/recientes/", dashboard_recientes, name="dashboard-recientes"),
 ]

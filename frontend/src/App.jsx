@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// Vistas de ejemplo
+// Importar el Dashboard real
+import { Dashboard } from "./pages/Dashboard";
+
 function Home() {
   return <h2>🏠 Bienvenido a Logitrack</h2>;
 }
@@ -12,10 +14,6 @@ function Pedidos() {
 
 function Chofer() {
   return <h2>🚚 Panel del Chofer</h2>;
-}
-
-function Dashboard() {
-  return <h2>📊 Dashboard con gráficos</h2>;
 }
 
 function App() {
@@ -55,6 +53,3 @@ function App() {
 }
 
 export default App;
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';

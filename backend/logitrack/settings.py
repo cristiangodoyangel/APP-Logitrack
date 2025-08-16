@@ -111,6 +111,8 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
+# settings.py
+
 from datetime import timedelta
 
 REST_FRAMEWORK = {
@@ -122,25 +124,23 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
-
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend"
     ],
-
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-
-    # 👇 Esto asegura que todas las vistas requieren autenticación
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
 }
 
+
+# Configuración de Simple JWT
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),   
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     
-    "ROTATE_REFRESH_TOKENS": True,                    
-    "BLACKLIST_AFTER_ROTATION": True,                 
-    "AUTH_HEADER_TYPES": ("Bearer",),                 
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),   # Token de acceso válido por 1 hora
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),      # Refresh token válido por 7 días
+    "ROTATE_REFRESH_TOKENS": True,                    # Genera un nuevo refresh al renovar
+    "BLACKLIST_AFTER_ROTATION": True,                 # Invalida el refresh anterior
+    "AUTH_HEADER_TYPES": ("Bearer",),                 # Autenticación con "Authorization: Bearer <token>"
 }

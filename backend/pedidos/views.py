@@ -59,6 +59,12 @@ class PedidoListCreateView(generics.ListCreateAPIView):
     ordering_fields = ['fecped', 'estped']
     permission_classes = [IsAdmin]
 
+# 1B. Endpoint público solo para lectura (para demo/frontend)
+class PedidoPublicListView(generics.ListAPIView):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+    permission_classes = [permissions.AllowAny]  # 👈 Público solo lectura
+
 # 2. Actualizar estado de pedido (solo PATCH y solo estped)
 class PedidoEstadoUpdateView(generics.UpdateAPIView):
     queryset = Pedido.objects.all()
