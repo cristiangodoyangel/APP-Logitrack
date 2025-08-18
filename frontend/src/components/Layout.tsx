@@ -1,7 +1,7 @@
 // src/pages/Pedidos.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Layout } from "./Layout"; // ✅ corregida la ruta de importación
+import { Layout } from "../components/Layout"; // ✅ ruta corregida
 
 export function Pedidos() {
   const [pedidos, setPedidos] = useState<any[]>([]);
@@ -21,8 +21,8 @@ export function Pedidos() {
           {error ? (
             <p className="text-danger">{error}</p>
           ) : (
-            <table className="table table-striped">
-              <thead>
+            <table className="table table-striped table-bordered align-middle">
+              <thead className="table-light">
                 <tr>
                   <th>ID</th>
                   <th>Cliente</th>
@@ -47,5 +47,3 @@ export function Pedidos() {
     </Layout>
   );
 }
-export { Layout };
-

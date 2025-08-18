@@ -1,7 +1,9 @@
-export function DeliveryApp() {
+// src/pages/Delivery.tsx
+import { Layout } from "../components/Layout"; // ✅ usamos Layout
+
+export function Delivery() {
   return (
-    <div style={{ backgroundColor: "#d8e7ed", minHeight: "100vh", padding: "20px" }}>
-      <h2 style={{ color: "#074260" }}>App Delivery</h2>
+    <Layout title="App Delivery">
       <div className="card shadow-sm mt-3" style={{ backgroundColor: "#ffffff" }}>
         <div className="card-body">
           <p>
@@ -10,6 +12,6 @@ export function DeliveryApp() {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

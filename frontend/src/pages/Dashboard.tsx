@@ -1,3 +1,4 @@
+// src/pages/Dashboard.tsx
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -13,7 +14,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { Layout } from "../components/Layout";
+import { Layout } from "../components/Layout";  // ✅ ruta corregida
 
 // Paleta de azules
 const COLORS = [
@@ -95,7 +96,7 @@ export function Dashboard() {
           { path: "/dashboard", icon: "bi-speedometer2", label: "Dashboard" },
           { path: "/pedidos", icon: "bi-box", label: "Pedidos" },
           { path: "/clientes", icon: "bi-people", label: "Clientes" },
-          { path: "/chofer", icon: "bi-truck", label: "Choferes" },
+          { path: "/choferes", icon: "bi-truck", label: "Choferes" },
           { path: "/vehiculos", icon: "bi-car-front", label: "Vehículos" },
           { path: "/delivery", icon: "bi-phone", label: "App Delivery" },
         ].map((item) => (

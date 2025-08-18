@@ -1,7 +1,7 @@
 // src/pages/Pedidos.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Layout } from "../components/Layout"; // ✅ corregida la ruta real (components)
+import { Layout } from "../components/Layout"; // ✅ sin .tsx
 
 export function Pedidos() {
   const [pedidos, setPedidos] = useState<any[]>([]);
@@ -21,8 +21,8 @@ export function Pedidos() {
           {error ? (
             <p className="text-danger">{error}</p>
           ) : (
-            <table className="table table-striped">
-              <thead>
+            <table className="table table-striped table-bordered align-middle">
+              <thead className="table-light">
                 <tr>
                   <th>ID</th>
                   <th>Cliente</th>
