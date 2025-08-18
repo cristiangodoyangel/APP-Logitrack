@@ -1,49 +1,40 @@
-// src/pages/Pedidos.tsx
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Layout } from "../components/Layout"; // ✅ ruta corregida
+// src/components/Layout.tsx
+import { ReactNode } from "react";
 
-export function Pedidos() {
-  const [pedidos, setPedidos] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+type LayoutProps = {
+  title: string;
+  children: ReactNode;
+};
 
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/pedidos/")
-      .then((res) => setPedidos(res.data))
-      .catch(() => setError("No se pudieron cargar los pedidos."));
-  }, []);
-
+export function Layout({ title, children }: LayoutProps) {
   return (
-    <Layout title="Pedidos">
-      <div className="card shadow-sm" style={{ backgroundColor: "#ffffff" }}>
-        <div className="card-body">
-          {error ? (
-            <p className="text-danger">{error}</p>
-          ) : (
-            <table className="table table-striped table-bordered align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Cliente</th>
-                  <th>Estado</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pedidos.map((p) => (
-                  <tr key={p.idoped}>
-                    <td>{p.idoped}</td>
-                    <td>{p.idclie}</td>
-                    <td>{p.estped}</td>
-                    <td>{p.fecped}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-    </Layout>
+    <div
+      style={{
+        maxWidth: "1800px",
+        margin: "0 auto",
+        padding: "30px",
+        backgroundColor: "#d8e7ed",
+        minHeight: "100vh",
+        boxShadow: "0 0 25px rgba(0,0,0,0.15)",
+        borderRadius: "12px",
+      }}
+    >
+      {/* Encabezado de página */}
+      <header style={{ marginBottom: "25px" }}>
+        <h2
+          style={{
+            color: "#074260",
+            fontWeight: 700,
+            borderBottom: "2px solid #074260",
+            paddingBottom: "8px",
+          }}
+        >
+          {title}
+        </h2>
+      </header>
+
+      {/* Contenido dinámico */}
+      <main>{children}</main>
+    </div>
   );
 }

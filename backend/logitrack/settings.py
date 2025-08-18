@@ -116,24 +116,16 @@ CSRF_TRUSTED_ORIGINS = [
 from datetime import timedelta
 
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": [
-        "rest_framework.renderers.JSONRenderer",
-    ]
-    if not DEBUG
-    else [
-        "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",   # JWT
+        "rest_framework.authentication.SessionAuthentication",         # Sesiones (admin, login normal)
+        "rest_framework.authentication.BasicAuthentication",           # Básica (útil para pruebas rápidas con curl/postman)
     ],
-    "DEFAULT_FILTER_BACKENDS": [
-        "django_filters.rest_framework.DjangoFilterBackend"
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # Requiere login por defecto
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    ),
 }
+
 
 
 # Configuración de Simple JWT

@@ -10,6 +10,7 @@ import { Choferes } from "./pages/Choferes";
 import { Vehiculos } from "./pages/Vehiculos";
 import { Delivery } from "./pages/Delivery";
 
+
 function Home() {
   return <h2>Bienvenido a Logitrack</h2>;
 }
@@ -47,6 +48,7 @@ function App() {
           <Route path="/choferes" element={<Choferes />} />
           <Route path="/vehiculos" element={<Vehiculos />} />
           <Route path="/delivery" element={<Delivery />} />
+          
         </Routes>
       </div>
     </Router>
